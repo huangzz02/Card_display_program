@@ -10,12 +10,13 @@
             text-align: center;
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
         }
         #instructions {
             margin: 20px auto;
-            width: 450px;
+            max-width: 450px;
+            width: 90%;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 15px;
             border-radius: 10px;
@@ -33,10 +34,11 @@
         }
         #menu, #input-form {
             margin: 20px auto;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             background-color: #ffffff;
-            width: 450px;
+            max-width: 450px;
+            width: 90%;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
         }
@@ -46,7 +48,7 @@
         #menu h1 {
             color: #2c3e50;
             margin-top: 0;
-            font-size: 24px; /* 字體大小減小 */
+            font-size: 24px;
         }
         #input-form h2 {
             color: #2c3e50;
@@ -55,7 +57,7 @@
         #menu button {
             display: block;
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             margin: 8px 0;
             font-size: 16px;
             cursor: pointer;
@@ -75,7 +77,7 @@
         }
         #input-form label {
             display: block;
-            margin: 12px 0 6px;
+            margin: 10px 0 5px;
             font-weight: bold;
             color: #34495e;
         }
@@ -100,8 +102,8 @@
         }
         #input-form button {
             width: 48%;
-            padding: 10px;
-            margin: 15px 1% 0;
+            padding: 8px;
+            margin: 10px 1% 0;
             cursor: pointer;
             background-color: #2ecc71;
             color: white;
@@ -132,6 +134,52 @@
             display: none;
             width: fit-content;
             overflow-x: auto;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* 提升手機滾動體驗 */
+        }
+
+        /* 媒體查詢：小螢幕適配 */
+        @media (max-width: 600px) {
+            body {
+                padding: 5px;
+            }
+            #instructions, #menu, #input-form {
+                padding: 10px;
+            }
+            #menu h1 {
+                font-size: 20px;
+            }
+            #input-form h2 {
+                font-size: 18px;
+            }
+            #menu button {
+                padding: 8px;
+                font-size: 14px;
+            }
+            #input-form label {
+                font-size: 13px;
+            }
+            #input-form input, #input-form select {
+                font-size: 13px;
+                padding: 6px;
+            }
+            #input-form .hint {
+                font-size: 11px;
+            }
+            #input-form button {
+                padding: 6px;
+                font-size: 13px;
+            }
+            #output {
+                font-size: 14px;
+                padding: 10px;
+            }
+            #instructions .content {
+                margin-left: 15px;
+            }
+            #instructions ul {
+                margin-left: 15px;
+            }
         }
     </style>
 </head>
