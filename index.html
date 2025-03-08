@@ -128,18 +128,72 @@
             background-color: #ffffff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: left;
-            white-space: pre;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 16px;
             display: none;
-            width: fit-content;
-            overflow-x: auto;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* 提升手機滾動體驗 */
+            max-width: 90%; /* 預設最大寬度 */
+            width: fit-content; /* 寬度適配內容 */
+            overflow-x: auto; /* 水平滾動 */
+            -webkit-overflow-scrolling: touch;
+        }
+        .card-row {
+            display: flex;
+            flex-wrap: nowrap; /* 不換行，往側邊延展 */
+            justify-content: flex-start; /* 從左開始排列 */
+            margin-bottom: 10px;
+            width: fit-content; /* 寬度適配實際內容 */
+        }
+        .card {
+            border: 1px solid #000;
+            border-radius: 5px;
+            margin: 5px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            background-color: #fff;
+            flex-shrink: 0; /* 防止卡片被壓縮 */
+        }
+        .card.default {
+            width: 100px;
+            height: 140px;
+            font-size: 12px;
+            line-height: 1.2;
+            padding: 5px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card.simple {
+            width: 50px;
+            height: 70px;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 5px;
+        }
+        .card.unicode {
+            width: auto;
+            height: auto;
+            font-size: 24px;
+            padding: 5px;
+            display: inline-block;
+        }
+        .card .top-left, .card .bottom-right {
+            font-size: 12px;
+        }
+        .card.default .top-left {
+            align-self: flex-start;
+        }
+        .card.default .bottom-right {
+            align-self: flex-end;
+        }
+        .card .middle {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         /* 媒體查詢：小螢幕適配 */
-        @media (max-width: 600px) {
+        @media (max-width: 450px) {
             body {
                 padding: 5px;
             }
@@ -171,14 +225,21 @@
                 font-size: 13px;
             }
             #output {
-                font-size: 14px;
-                padding: 10px;
+                max-width: 87.5%; /* 與 #instructions 和 #menu 一致 */
+                width: fit-content; /* 與 #instructions 和 #menu 一致 */
             }
-            #instructions .content {
-                margin-left: 15px;
+            .card.default {
+                width: 80px;
+                height: 110px;
+                font-size: 10px;
             }
-            #instructions ul {
-                margin-left: 15px;
+            .card.simple {
+                width: 40px;
+                height: 60px;
+                font-size: 12px;
+            }
+            .card.unicode {
+                font-size: 20px;
             }
         }
     </style>
@@ -223,38 +284,33 @@
                 const rank = this.rank;
                 let middleLines = [];
                 if (this.suit === 'S') {
-                    middleLines = ['    •••    ', '   •••••   ', '  •••••••  ', '    •••    '];
+                    middleLines = ['•••', '•••••', '•••••••', '•••'];
                 } else if (this.suit === 'H') {
-                    middleLines = ['   •   •   ', '  •••••••  ', '   •••••   ', '     •     '];
+                    middleLines = ['• •', '•••••••', '•••••', '•'];
                 } else if (this.suit === 'D') {
-                    middleLines = ['    •••    ', '   •••••   ', '   •••••   ', '    •••    '];
+                    middleLines = ['•••', '•••••', '•••••', '•••'];
                 } else if (this.suit === 'C') {
-                    middleLines = ['    •••    ', '  •  •  •  ', '  •••••••  ', '    •••    '];
+                    middleLines = ['•••', '• • •', '•••••••', '•••'];
                 }
-                return [
-                    '┌───────────┐',
-                    `│${rank.padEnd(11)}│`,
-                    `│${suitSymbol.padEnd(11)}│`,
-                    `│${middleLines[0]}│`,
-                    `│${middleLines[1]}│`,
-                    `│${middleLines[2]}│`,
-                    `│${middleLines[3]}│`,
-                    `│          ${suitSymbol}│`,
-                    `│          ${rank}│`,
-                    '└───────────┘'
-                ];
+                return `
+                    <div class="card default">
+                        <div class="top-left">${rank}${suitSymbol}</div>
+                        <div class="middle">${middleLines.join('<br>')}</div>
+                        <div class="bottom-right">${suitSymbol}${rank}</div>
+                    </div>
+                `;
             }
 
             simpleAppearance() {
                 const suitSymbols = { 'S': '♠', 'H': '♥', 'D': '♦', 'C': '♣' };
                 const suitSymbol = suitSymbols[this.suit];
                 const rank = this.rank;
-                return [
-                    '┌───┐',
-                    `│ ${rank} │`,
-                    `│ ${suitSymbol} │`,
-                    '└───┘'
-                ];
+                return `
+                    <div class="card simple">
+                        <div>${rank}</div>
+                        <div>${suitSymbol}</div>
+                    </div>
+                `;
             }
 
             unicodeAppearance() {
@@ -264,7 +320,7 @@
                     'D': { 'A': '🃁', '2': '🃂', '3': '🃃', '4': '🃄', '5': '🃅', '6': '🃆', '7': '🃇', '8': '🃈', '9': '🃉', 'T': '🃊', 'J': '🃋', 'Q': '🃍', 'K': '🃎' },
                     'C': { 'A': '🃑', '2': '🃒', '3': '🃓', '4': '🃔', '5': '🃕', '6': '🃖', '7': '🃗', '8': '🃘', '9': '🃙', 'T': '🃚', 'J': '🃛', 'Q': '🃝', 'K': '🃞' }
                 };
-                return [unicodeCards[this.suit][this.rank]];
+                return `<div class="card unicode">${unicodeCards[this.suit][this.rank]}</div>`;
             }
         }
 
@@ -286,29 +342,19 @@
             const output = document.getElementById('output');
             output.innerHTML = '';
 
-            const cardLines = cards.map(card => {
-                if (appearanceMode === 1) return card.defaultAppearance();
-                else if (appearanceMode === 2) return card.simpleAppearance();
-                else return card.unicodeAppearance();
-            });
-
-            const linesPerCard = appearanceMode === 1 ? 10 : appearanceMode === 2 ? 4 : 1;
-            let result = '';
+            let html = '';
             for (let i = 0; i < cards.length; i += row) {
                 const rowCards = cards.slice(i, i + row);
-                const rowLines = Array(linesPerCard).fill('');
-
-                rowCards.forEach((card, index) => {
-                    const lines = cardLines[i + index];
-                    lines.forEach((line, lineIndex) => {
-                        rowLines[lineIndex] += line + ' ';
-                    });
+                html += '<div class="card-row">';
+                rowCards.forEach(card => {
+                    if (appearanceMode === 1) html += card.defaultAppearance();
+                    else if (appearanceMode === 2) html += card.simpleAppearance();
+                    else html += card.unicodeAppearance();
                 });
-
-                result += rowLines.join('\n') + '\n\n';
+                html += '</div>';
             }
 
-            output.textContent = result;
+            output.innerHTML = html;
             output.style.display = 'block';
         }
 
